@@ -1,7 +1,10 @@
 import { whisper, window } from '@oliveai/ldk';
 
+let windowNames = [];
+
 interface Props {
   activeWindow: window.WindowInfo;
+  activeWindows: string[];
 }
 export default class WindowWhisper {
   whisper: whisper.Whisper;
@@ -10,20 +13,28 @@ export default class WindowWhisper {
 
   props: Props;
 
-  constructor(activeWindow: window.WindowInfo) {
+  constructor(activeWindow: window.WindowInfo, activeWindows: string[] = []) {
     this.whisper = undefined;
     this.label = 'Active Window Changed';
     this.props = {
       activeWindow,
+      activeWindows
     };
   }
 
   createComponents() {
+    // const name: whisper.ListPair = {
+    //   type: whisper.WhisperComponentType.ListPair,
+    //   copyable: true,
+    //   label: 'Window Name',
+    //   value: this.props.activeWindow.path,
+    //   style: whisper.Urgency.None,
+    // };
     const name: whisper.ListPair = {
       type: whisper.WhisperComponentType.ListPair,
       copyable: true,
-      label: 'Window Name',
-      value: this.props.activeWindow.path,
+      label: 'Active Windows',
+      value: this.props.activeWindows.join(', '),
       style: whisper.Urgency.None,
     };
     const pid: whisper.ListPair = {
