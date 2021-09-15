@@ -1,11 +1,11 @@
-import { whisper } from '@oliveai/ldk';
+import { whisper, window } from '@oliveai/ldk';
 import { WindowWhisper } from '.';
 
 jest.mock('@oliveai/ldk');
 
 const mockWhisperClose = jest.fn();
 
-const TEST_PARAM = { path: 'test', pid: 0 };
+const TEST_PARAM = { path: 'test', pid: 0 } as window.WindowInfo;
 
 describe('Window Whisper', () => {
   beforeEach(() => {

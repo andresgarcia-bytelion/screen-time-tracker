@@ -25,7 +25,7 @@ describe('Active Window Listener', () => {
   });
 
   it('should create the whisper when handler is triggered', () => {
-    const activeWindowStub = {};
+    const activeWindowStub = {} as window.WindowInfo;
 
     handler(activeWindowStub);
 

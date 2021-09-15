@@ -2,7 +2,7 @@ import { window } from '@oliveai/ldk';
 
 import { WindowWhisper } from '../../whispers';
 
-const handler = (activeWindow) => {
+const handler = (activeWindow: window.WindowInfo) => {
   const whisper = new WindowWhisper(activeWindow);
   whisper.show();
 };

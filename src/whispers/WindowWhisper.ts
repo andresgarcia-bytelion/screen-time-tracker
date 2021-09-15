@@ -1,7 +1,16 @@
-import { whisper } from '@oliveai/ldk';
+import { whisper, window } from '@oliveai/ldk';
 
+interface Props {
+  activeWindow: window.WindowInfo;
+}
 export default class WindowWhisper {
-  constructor(activeWindow) {
+  whisper: whisper.Whisper;
+
+  label: string;
+
+  props: Props;
+
+  constructor(activeWindow: window.WindowInfo) {
     this.whisper = undefined;
     this.label = 'Active Window Changed';
     this.props = {
@@ -10,14 +19,14 @@ export default class WindowWhisper {
   }
 
   createComponents() {
-    const name = {
+    const name: whisper.ListPair = {
       type: whisper.WhisperComponentType.ListPair,
       copyable: true,
       label: 'Window Name',
       value: this.props.activeWindow.path,
       style: whisper.Urgency.None,
     };
-    const pid = {
+    const pid: whisper.ListPair = {
       type: whisper.WhisperComponentType.ListPair,
       copyable: true,
       label: 'Process Id',
@@ -43,7 +52,7 @@ export default class WindowWhisper {
     this.whisper.close(WindowWhisper.onClose);
   }
 
-  static onClose(err) {
+  static onClose(err?: Error) {
     if (err) {
       console.error('There was an error closing Window whisper', err);
     }
