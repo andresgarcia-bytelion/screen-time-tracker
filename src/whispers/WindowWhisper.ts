@@ -4,6 +4,7 @@ interface Props {
   activeWindow: window.WindowInfo;
   activeWindows: string[];
   timers: Record<string, unknown>;
+  totalTime: number;
 }
 export default class WindowWhisper {
   whisper: whisper.Whisper;
@@ -15,7 +16,8 @@ export default class WindowWhisper {
   constructor(
     activeWindow: window.WindowInfo,
     activeWindows: string[] = [],
-    timers: Record<string, unknown> = {}
+    timers: Record<string, unknown> = {},
+    totalTime: number
   ) {
     this.whisper = undefined;
     this.label = 'Screen Time So Far';
@@ -23,32 +25,51 @@ export default class WindowWhisper {
       activeWindow,
       activeWindows,
       timers,
+      totalTime,
     };
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  createListPair(key, value) {
+    const pair: whisper.ListPair = {
+      type: whisper.WhisperComponentType.ListPair,
+      copyable: true,
+      label: `${key}`,
+      value: `${value}`,
+      style: whisper.Urgency.None,
+    };
+    return pair;
+  }
+
   createComponents() {
-    // const name: whisper.ListPair = {
-    //   type: whisper.WhisperComponentType.ListPair,
-    //   copyable: true,
-    //   label: 'Window Name',
-    //   value: this.props.activeWindow.path,
-    //   style: whisper.Urgency.None,
-    // };
-    const name: whisper.ListPair = {
-      type: whisper.WhisperComponentType.ListPair,
-      copyable: true,
-      label: 'Active Windows',
-      value: this.props.activeWindows.join(', '),
-      style: whisper.Urgency.None,
+    const result = [];
+    const keys = Object.keys(this.props.timers);
+
+    keys.forEach((key, index) => {
+      console.log(`${key}: ${this.props.timers[key]}`);
+      const components = this.createListPair(key, `${this.props.timers[key]} seconds`);
+      if (this.props.timers[key] !== 0) {
+        result.push(components);
+      }
+    });
+
+    const divider: whisper.Divider = {
+      type: whisper.WhisperComponentType.Divider,
     };
-    const pid: whisper.ListPair = {
-      type: whisper.WhisperComponentType.ListPair,
-      copyable: true,
-      label: 'Screen Time',
-      value: JSON.stringify(this.props.timers),
-      style: whisper.Urgency.None,
-    };
-    return [name, pid];
+
+    if (this.props.totalTime > 0) {
+      result.push(divider);
+      result.push(this.createListPair('Overall Screen Time', `${this.props.totalTime} seconds`));
+    } else {
+      const introMessage: whisper.Message = {
+        type: whisper.WhisperComponentType.Message,
+        body: 'No screen time has been recorded yet.',
+        style: whisper.Urgency.Success,
+      };
+      return [introMessage];
+    }
+
+    return result;
   }
 
   show() {

@@ -16,7 +16,7 @@ describe('Window Whisper', () => {
   });
 
   it('creates components as expected', () => {
-    const newWhisper = new WindowWhisper(TEST_PARAM);
+    const newWhisper = new WindowWhisper(TEST_PARAM, [], {}, 0);
     const actual = newWhisper.createComponents();
 
     const expected = [
@@ -36,7 +36,7 @@ describe('Window Whisper', () => {
   });
 
   it('creates a whisper and closes it gracefully', async () => {
-    const newWhisper = new WindowWhisper(TEST_PARAM);
+    const newWhisper = new WindowWhisper(TEST_PARAM, [], {}, 0);
     newWhisper.show();
     await Promise.resolve();
     newWhisper.close();

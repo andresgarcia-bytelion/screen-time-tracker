@@ -9,20 +9,24 @@ let currentDateTime;
 let previousApplicationName = null;
 let tempTime;
 let currentApplicationName;
+let totalTime = 0;
 
 const getDateDiff = (startDate: Date, endDate: Date) => {
-  return (endDate.getTime() - startDate.getTime()) / 1000;
+  const diff = endDate.getTime() - startDate.getTime();
+  const result = Math.floor(diff / 1000);
+  totalTime += result;
+  return result;
 };
 
 const handler = (activeWindow: window.WindowInfo) => {
   currentApplicationName = activeWindow.path;
-  // console.log(JSON.stringify(activeWindow));
+  console.log(JSON.stringify(activeWindow));
   // console.log(JSON.stringify(activeWindows));
 
   if (Object.keys(timers).length === 0) {
     currentDateTime = new Date();
     previousDateTime = currentDateTime;
-    previousApplicationName = activeWindow.path;
+    previousApplicationName = currentApplicationName;
   } else {
     previousDateTime = currentDateTime;
     currentDateTime = new Date();
@@ -46,11 +50,11 @@ const handler = (activeWindow: window.WindowInfo) => {
   }
 
   // console.log(JSON.stringify(timers));
-  previousApplicationName = activeWindow.path;
+  previousApplicationName = currentApplicationName;
 
   if (!activeWindows.includes(currentApplicationName)) {
     activeWindows.push(currentApplicationName);
-    const whisper = new WindowWhisper(activeWindow, activeWindows, timers);
+    const whisper = new WindowWhisper(activeWindow, activeWindows, timers, totalTime);
     whisper.show();
   }
 };
