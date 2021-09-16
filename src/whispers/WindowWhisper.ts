@@ -46,7 +46,7 @@ export default class WindowWhisper {
     const keys = Object.keys(this.props.timers);
 
     keys.forEach((key, index) => {
-      console.log(`${key}: ${this.props.timers[key]}`);
+      // console.log(`${key}: ${this.props.timers[key]}`);
       const components = this.createListPair(key, `${this.props.timers[key]} seconds`);
       if (this.props.timers[key] !== 0) {
         result.push(components);
