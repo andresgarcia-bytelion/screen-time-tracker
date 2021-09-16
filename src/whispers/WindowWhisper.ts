@@ -1,10 +1,9 @@
 import { whisper, window } from '@oliveai/ldk';
 
-let windowNames = [];
-
 interface Props {
   activeWindow: window.WindowInfo;
   activeWindows: string[];
+  timers: Record<string, unknown>;
 }
 export default class WindowWhisper {
   whisper: whisper.Whisper;
@@ -13,12 +12,17 @@ export default class WindowWhisper {
 
   props: Props;
 
-  constructor(activeWindow: window.WindowInfo, activeWindows: string[] = []) {
+  constructor(
+    activeWindow: window.WindowInfo,
+    activeWindows: string[] = [],
+    timers: Record<string, unknown> = {}
+  ) {
     this.whisper = undefined;
-    this.label = 'Active Window Changed';
+    this.label = 'Screen Time So Far';
     this.props = {
       activeWindow,
-      activeWindows
+      activeWindows,
+      timers,
     };
   }
 
@@ -40,8 +44,8 @@ export default class WindowWhisper {
     const pid: whisper.ListPair = {
       type: whisper.WhisperComponentType.ListPair,
       copyable: true,
-      label: 'Process Id',
-      value: this.props.activeWindow.pid.toString(),
+      label: 'Screen Time',
+      value: JSON.stringify(this.props.timers),
       style: whisper.Urgency.None,
     };
     return [name, pid];
