@@ -1,4 +1,5 @@
 import { whisper, window } from '@oliveai/ldk';
+import { secondsToMinutes } from 'date-fns';
 
 interface Props {
   activeWindow: window.WindowInfo;
@@ -59,7 +60,13 @@ export default class WindowWhisper {
 
     if (this.props.totalTime > 0) {
       result.push(divider);
-      result.push(this.createListPair('Overall Screen Time', `${this.props.totalTime} seconds`));
+      const minutes = secondsToMinutes(this.props.totalTime);
+      result.push(
+        this.createListPair(
+          'Overall Screen Time',
+          `${this.props.totalTime} seconds (${minutes} minute(s))`
+        )
+      );
     } else {
       const introMessage: whisper.Message = {
         type: whisper.WhisperComponentType.Message,

@@ -1,6 +1,6 @@
 import { whisper, window } from '@oliveai/ldk';
 
-import { differenceInDays, addDays, getDate } from 'date-fns';
+import { differenceInDays, addDays, getDate, differenceInSeconds } from 'date-fns';
 import { WindowWhisper } from '../../whispers';
 
 let activeWindows = [];
@@ -23,7 +23,7 @@ const getDateDiff = (startDate: Date, endDate: Date, type?: string) => {
       return result;
     case 'seconds':
     default:
-      result = Math.floor(diff / 1000);
+      result = differenceInSeconds(endDate, startDate);
       totalTime += result;
       reminderTime += result;
       return result;
@@ -87,7 +87,7 @@ const handler = (activeWindow: window.WindowInfo) => {
     reminderTime = 0;
     whisper.create({
       label: 'Activity Reminder',
-      onClose: () => {},
+      onClose: () => { },
       components: [
         {
           type: whisper.WhisperComponentType.Message,
