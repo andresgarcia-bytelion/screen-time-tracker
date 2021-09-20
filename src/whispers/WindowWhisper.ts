@@ -91,6 +91,13 @@ export default class WindowWhisper {
       });
   }
 
+  update(activeWindow, activeWindows, timers, totalTime) {
+    this.props = { ...this.props, activeWindow, activeWindows, timers, totalTime };
+    this.whisper.update({
+      components: this.createComponents(),
+    });
+  }
+
   close() {
     this.whisper.close(WindowWhisper.onClose);
   }

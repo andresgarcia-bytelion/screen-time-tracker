@@ -12,6 +12,7 @@ let tempTime;
 let currentApplicationName;
 let totalTime = 0;
 let reminderTime = 0;
+let currentWhisper;
 
 const getDateDiff = (startDate: Date, endDate: Date, type?: string) => {
   const diff = endDate.getTime() - startDate.getTime();
@@ -78,8 +79,12 @@ const handler = (activeWindow: window.WindowInfo) => {
 
   if (!activeWindows.includes(currentApplicationName)) {
     activeWindows.push(currentApplicationName);
-    const currentWhisper = new WindowWhisper(activeWindow, activeWindows, timers, totalTime);
-    currentWhisper.show();
+    if (!currentWhisper) {
+      currentWhisper = new WindowWhisper(activeWindow, activeWindows, timers, totalTime);
+      currentWhisper.show();
+    } else {
+      currentWhisper.update(activeWindow, activeWindows, timers, totalTime);
+    }
   }
 
   if (reminderTime > 60) {
