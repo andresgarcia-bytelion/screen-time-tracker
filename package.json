@@ -4,6 +4,8 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
+    "build:dev": "webpack --entry ./src/index.ts --config ./node_modules/@oliveai/ldk/dist/webpack/config.js",
+    "watch": "nodemon --exec \"npm run build:dev && tail -n 0 -f ~/Library/Logs/Olive\\ Helps/Olive\\ Helps-*.log\" --ignore dist/",
     "build": "webpack --entry ./src/index.ts --config ./node_modules/@oliveai/ldk/dist/webpack/config.js",
     "test": "jest --maxWorkers=1",
     "test:coverage": "npm run test -- --collect-coverage",
@@ -36,6 +38,7 @@
     "common-tags": "^1.8.0",
     "core-js": "^3.12.1",
     "date-fns": "^2.23.0",
+    "nodemon": "^2.0.12",
     "terser-webpack-plugin": "^5.1.1",
     "webpack": "^5.28.0",
     "webpack-cli": "^4.5.0",
