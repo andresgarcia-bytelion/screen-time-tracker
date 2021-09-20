@@ -1,6 +1,6 @@
 import { whisper, window } from '@oliveai/ldk';
 
-import { differenceInDays, addDays, getDate, differenceInSeconds } from 'date-fns';
+import { differenceInDays, differenceInSeconds } from 'date-fns';
 import { WindowWhisper } from '../../whispers';
 
 let activeWindows = [];
@@ -21,32 +21,34 @@ const getDateDiff = (startDate: Date, endDate: Date, type?: string) => {
   switch (type) {
     case 'days':
       result = differenceInDays(endDate, startDate);
+
       return result;
     case 'seconds':
     default:
       result = differenceInSeconds(endDate, startDate);
       totalTime += result;
       reminderTime += result;
+
       return result;
   }
 };
 
 const handler = (activeWindow: window.WindowInfo) => {
   const now = new Date();
+
   if (previousDateTime) {
     const dayDiff = getDateDiff(previousDateTime, now, 'days');
+
     // reset counters if it is a new day
     if (dayDiff > 0) {
       timers = {};
       totalTime = 0;
       activeWindows = [];
     }
-    console.log();
   }
 
   currentApplicationName = activeWindow.path;
   console.log(JSON.stringify(activeWindow));
-  // console.log(JSON.stringify(activeWindows));
 
   if (Object.keys(timers).length === 0) {
     currentDateTime = now;
@@ -61,10 +63,12 @@ const handler = (activeWindow: window.WindowInfo) => {
     if (timers[previousApplicationName]) {
       tempTime = getDateDiff(previousDateTime, currentDateTime);
       timers[previousApplicationName] += tempTime;
+
       console.log(`adding ${tempTime} seconds to ${previousApplicationName}`);
     } else {
       tempTime = getDateDiff(previousDateTime, currentDateTime);
       timers[previousApplicationName] = tempTime;
+
       console.log(`setting ${tempTime} seconds for ${previousApplicationName}`);
     }
   }
@@ -91,18 +95,47 @@ const handler = (activeWindow: window.WindowInfo) => {
   if (reminderTime > 60) {
     console.log(`reminder time: ${reminderTime} seconds`);
     reminderTime = 0;
+
     whisper.create({
-      label: 'Activity Reminder',
+      label: '🧘 Time to Stretch!',
       onClose: () => { },
       components: [
         {
           type: whisper.WhisperComponentType.Message,
-          body: `Don't forget to stretch your legs!`,
+          body: 'A good stretch or stroll will do wonders for your physical and mental health. ✅',
+          style: whisper.Urgency.Success,
         },
+        {
+          type: whisper.WhisperComponentType.Markdown,
+          body: `**Stretching keeps the muscles flexible, strong, and healthy**, and we need that flexibility to maintain a range of motion in the joints. Without it, the muscles shorten and become tight. Then, when you call on the muscles for activity, they are weak and unable to extend all the way.`,
+        },
+        {
+          type: whisper.WhisperComponentType.Divider,
+        },
+        {
+          type: whisper.WhisperComponentType.Markdown,
+          body: `**Additional Stretching Techniques**`,
+        },
+        {
+          type: whisper.WhisperComponentType.Link,
+          text: 'Pappa Bless Stretch Test',
+          onClick: () => {},
+        },
+        {
+          type: whisper.WhisperComponentType.Link,
+          text: 'OWASP Tendon Security',
+          onClick: () => {},
+        },
+        {
+          type: whisper.WhisperComponentType.Link,
+          text: 'Heavy Metal Goat Yoga',
+          onClick: () => {},
+        }
       ],
     });
   }
 };
+
 const listen = () => {
   window.listenActiveWindow(handler);
 };
