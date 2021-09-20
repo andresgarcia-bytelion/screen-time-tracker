@@ -79,12 +79,13 @@ const handler = (activeWindow: window.WindowInfo) => {
 
   if (!activeWindows.includes(currentApplicationName)) {
     activeWindows.push(currentApplicationName);
-    if (!currentWhisper) {
-      currentWhisper = new WindowWhisper(activeWindow, activeWindows, timers, totalTime);
-      currentWhisper.show();
-    } else {
-      currentWhisper.update(activeWindow, activeWindows, timers, totalTime);
-    }
+  }
+
+  if (!currentWhisper) {
+    currentWhisper = new WindowWhisper(activeWindow, activeWindows, timers, totalTime);
+    currentWhisper.show();
+  } else {
+    currentWhisper.update(activeWindow, activeWindows, timers, totalTime);
   }
 
   if (reminderTime > 60) {

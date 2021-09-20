@@ -14,6 +14,8 @@ export default class WindowWhisper {
 
   props: Props;
 
+  isShown: boolean;
+
   constructor(
     activeWindow: window.WindowInfo,
     activeWindows: string[] = [],
@@ -28,6 +30,7 @@ export default class WindowWhisper {
       timers,
       totalTime,
     };
+    this.isShown = false;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -88,6 +91,7 @@ export default class WindowWhisper {
       })
       .then((newWhisper) => {
         this.whisper = newWhisper;
+        this.isShown = true;
       });
   }
 
@@ -96,10 +100,15 @@ export default class WindowWhisper {
     this.whisper.update({
       components: this.createComponents(),
     });
+
+    if (!this.isShown) {
+      this.show();
+    }
   }
 
   close() {
     this.whisper.close(WindowWhisper.onClose);
+    this.isShown = false;
   }
 
   static onClose(err?: Error) {
