@@ -92,12 +92,17 @@ const handler = (activeWindow: window.WindowInfo) => {
     console.log(`reminder time: ${reminderTime} seconds`);
     reminderTime = 0;
     whisper.create({
-      label: 'Activity Reminder',
+      label: '🧘 Time to Stretch!',
       onClose: () => { },
       components: [
         {
           type: whisper.WhisperComponentType.Message,
-          body: `Don't forget to stretch your legs!`,
+          body: 'A good stretch or stroll will do wonders for your physical and mental health. ✅',
+          style: whisper.Urgency.Success,
+        },
+        {
+          type: whisper.WhisperComponentType.Message,
+          body: `Stretching keeps the muscles flexible, strong, and healthy, and we need that flexibility to maintain a range of motion in the joints. Without it, the muscles shorten and become tight. Then, when you call on the muscles for activity, they are weak and unable to extend all the way.`,
         },
       ],
     });
